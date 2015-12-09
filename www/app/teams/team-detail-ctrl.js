@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  angular.module('eliteApp').controller('TeamDetailCtrl', ['$stateParams', 'eliteApi', TeamDetailCtrl]);
+  angular.module('eliteApp').controller('TeamDetailCtrl', ['$ionicPopup','$stateParams', 'eliteApi', TeamDetailCtrl]);
   // injecting $stateParams
-  function TeamDetailCtrl($stateParams, eliteApi) {
+  function TeamDetailCtrl($ionicPopup, $stateParams, eliteApi) {
     var vm = this;
 
     vm.teamId = Number($stateParams.id);
@@ -39,14 +39,14 @@
     .value();
 
     vm.teamStanding = _.chain(data.standings)
-    .flatten("divisionStandings")
+    .map(function(division){ return division.divisionStandings;})
+    .flatten()
     .find({ "teamId": vm.teamId })
     .value();
 
+// for follow button, need to set initial value for following
     vm.following = false;
-
     vm.toggleFollow = function(){
-
       if (vm.following) {
         var confirmPopup = $ionicPopup.confirm({
           title: 'Unfollow?',
