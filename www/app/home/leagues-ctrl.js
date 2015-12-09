@@ -1,15 +1,19 @@
 (function () {
-    'use strict';
+  'use strict';
 
-    angular.module('eliteApp').controller('LeaguesCtrl', ['eliteApi',LeaguesCtrl]);
-// injecting $stateParams
-    function LeaguesCtrl(eliteApi) {
-      var vm = this;
-      var leagues = eliteApi.getLeagues();
-      vm.leagues = leagues;
-      vm.selectLeague = function(leagueId){
-        $state.go("app.teams");
-      };
+  angular.module('eliteApp').controller('LeaguesCtrl', ['$state','eliteApi',  LeaguesCtrl]);
+  // injecting $stateParams
+  function LeaguesCtrl($state, eliteApi) {
+    var vm = this;
 
+    eliteApi.getLeagues(function(data){
+      vm.leagues = data;
+    });
+
+    vm.selectLeague = function(id){
+      eliteApi.setLeagueId(id);
+      $state.go("app.teams");
     };
+
+  };
 })();
