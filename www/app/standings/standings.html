@@ -1,5 +1,19 @@
-<ion-view>
+<ion-view title="Standings" ng-controller ="StandingsCtrl as vm">
   <ion-content class="has-header">
-    <h1>Standings</h1>
+  <div class="list">
+<!-- use 2 ng-repeat for teams within divisions -->
+    <div ng-repeat="division in vm.standings">
+  <!-- heading for each division using item-divider class-->
+      <div class="item item-divider item-energized">
+        {{division.divisionName}}
+      </div>
+
+      <a href="#/app/standings/{{team.id}}" ng-repeat="team in division.divisionStandings"
+      class="item item-icon-right">
+        {{team.teamName}} ({{team.wins}}-{{team.losses}})
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </a>
+    </div>
+  </div>
   </ion-content>
 </ion-view>
