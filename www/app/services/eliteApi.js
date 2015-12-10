@@ -71,11 +71,17 @@
       return deferred.promise;
     }
 
-    function getLeagueData(){
+    function getLeagueData(forceRefresh){
+      // if user never forceRefresh, set (boolean) flag to false
+      if (typeof forceRefresh === "undefined") { forceRefresh = false; }
+
       var deferred = $q.defer(),
       cacheKey     = "leagueData-" + getLeagueId(),
-      leagueData   = self.leagueDataCache.get(cacheKey);
-console.log(cacheKey);
+      leagueData   = null;
+
+// by default flag is false, so leagueData will check if can get data from cache
+if(!forceRefresh){  leagueData   = self.leagueDataCache.get(cacheKey); }
+
       $ionicLoading.show({template:'Loading...'});
 
       if(leagueData){
