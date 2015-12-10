@@ -6,8 +6,8 @@
   // inject into function to use
   function LocationsCtrl(eliteApi){
     var vm = this; // vm stands for view-model
-    var data = eliteApi.getLeagueData();
-    vm.locations = data.locations;
-
+    eliteApi.getLeagueData().then(function(data){
+      vm.locations = data.locations;
+    });
   }
 })();

@@ -6,30 +6,21 @@
   // factory for object with getter functions to expose api
 
   function eliteApi(CacheFactory,$ionicLoading, $http, $q) {
+// console.log(CacheFactory.get("leaguesCache"));
+// for some reason console.log changes local storage, I think.
     self.leaguesCache = CacheFactory.get("leaguesCache");
     self.leagueDataCache = CacheFactory.get("leagueDataCache");
-    self.staticCache = CacheFactory.get("staticCache");
-
-    function setLeagueId(leagueId){
-      self.staticCache.put("currentLeagueId", leagueId);
-    }
-    // var currentLeagueId = '';
-    function getLeagueId(){
-      var id = self.staticCache.get("currentLeagueId");
-      console.log("in get leagueid", id);
-      return id;
-    }
 
     self.leaguesCache.setOptions({
-        onExpire: function (key, value) {
-            getLeagues()
-                .then(function () {
-                    console.log("Leagues Cache was automatically refreshed.", new Date());
-                }, function () {
-                    console.log("Error getting data. Putting expired item back in the cache.", new Date());
-                    self.leaguesCache.put(key, value);
-                });
-        }
+      onExpire: function (key, value) {
+        getLeagues()
+        .then(function () {
+          console.log("Leagues Cache was automatically refreshed.", new Date());
+        }, function () {
+          console.log("Error getting data. Putting expired item back in the cache.", new Date());
+          self.leaguesCache.put(key, value);
+        });
+      }
     });
 
 
@@ -44,6 +35,17 @@
         });
       }
     });
+    self.staticCache = CacheFactory.get("staticCache");
+
+    function setLeagueId(leagueId){
+      self.staticCache.put("currentLeagueId", leagueId);
+    }
+    // var currentLeagueId = '';
+    function getLeagueId(){
+      var id = self.staticCache.get("currentLeagueId");
+      console.log("in get leagueid", id);
+      return id;
+    }
 
     function getLeagues(){
       var deferred = $q.defer(),
@@ -79,8 +81,8 @@
       cacheKey     = "leagueData-" + getLeagueId(),
       leagueData   = null;
 
-// by default flag is false, so leagueData will check if can get data from cache
-if(!forceRefresh){  leagueData   = self.leagueDataCache.get(cacheKey); }
+      // by default flag is false, so leagueData will check if can get data from cache
+      if(!forceRefresh){  leagueData   = self.leagueDataCache.get(cacheKey); }
 
       $ionicLoading.show({template:'Loading...'});
 
@@ -95,15 +97,11 @@ if(!forceRefresh){  leagueData   = self.leagueDataCache.get(cacheKey); }
           self.leagueDataCache.put(cacheKey   , data);
           $ionicLoading.hide();
           deferred.resolve(data);
-          // $ionicLoading.hide();
-          // deferred.resolve(data);
         })
         .error(function() {
           console.log("Error while making HTTP call.");
           $ionicLoading.hide();
           deferred.reject();
-          // $ionicLoading.hide();
-          // deferred.reject();
         });
       }
       return deferred.promise;

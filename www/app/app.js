@@ -1,6 +1,11 @@
-angular.module("eliteApp", ["ionic","angular-cache"])
+angular.module("eliteApp", ["ionic","angular-cache","uiGmapgoogle-maps"])
 
 .run(function($ionicPlatform, CacheFactory) {
+  CacheFactory("leaguesCache", { storageMode: "localStorage", maxAge: 20000 , deleteOnExpire: "aggressive" });
+  CacheFactory("leagueDataCache", { storageMode: "localStorage", maxAge: 20000, deleteOnExpire: "aggressive" });
+  CacheFactory("myTeamsCache", { storageMode: "localStorage" });
+  CacheFactory("staticCache", { storageMode: "localStorage" });
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -12,101 +17,112 @@ angular.module("eliteApp", ["ionic","angular-cache"])
       StatusBar.styleDefault();
     }
 
-    CacheFactory("leagueDataCache", { storageMode: "localStorage", maxAge: 50000, deleteOnExpire: "aggressive" });
-    CacheFactory("leaguesCache", { storageMode: "localStorage", maxAge: 50000 , deleteOnExpire: "aggressive" });
-    CacheFactory("myTeamsCache", { storageMode: "localStorage" });
-    CacheFactory("staticCache", { storageMode: "localStorage" });
-
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider){
+.config(function($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider){
 
-    $stateProvider
+  uiGmapGoogleMapApiProvider.configure({
+    key: 'AIzaSyBTpYil1LUG8vrMneIKeyPYeTnBGU3BHdI',
+    v: '3.20', //defaults to latest 3.X anyhow
+    libraries: 'weather,geometry,visualization'
+  });
 
-    .state('home',{
-        abstract: true,
-        url:'/home',
-        templateUrl:'app/home/home.html'
-    })
+  $stateProvider
 
-    .state('home.leagues', {
-      url: "/leagues",
-      views: {
-        "tab-leagues": {
-          templateUrl: "app/home/leagues.html"
-        }
+  .state('home',{
+    abstract: true,
+    url:'/home',
+    templateUrl:'app/home/home.html'
+  })
+
+  .state('home.leagues', {
+    url: "/leagues",
+    views: {
+      "tab-leagues": {
+        templateUrl: "app/home/leagues.html"
       }
-    })
+    }
+  })
 
-    .state('home.myteams', {
-      url: "/myteams",
-      views: {
-        "tab-myteams": {
-          templateUrl: "app/home/myteams.html"
-        }
+  .state('home.myteams', {
+    url: "/myteams",
+    views: {
+      "tab-myteams": {
+        templateUrl: "app/home/myteams.html"
       }
-    })
+    }
+  })
 
-    .state('app',{
-        url: "/app",
-        templateUrl: "app/layout/menu-layout.html"
-    })
+  .state('app',{
+    url: "/app",
+    templateUrl: "app/layout/menu-layout.html"
+  })
 
-    .state('app.teams', {
-      url: "/teams",
-      views: {
-        'mainContent': {
-          templateUrl: "app/teams/teams.html"
-        }
+  .state('app.teams', {
+    url: "/teams",
+    views: {
+      'mainContent': {
+        templateUrl: "app/teams/teams.html"
       }
-    })
+    }
+  })
 
-    .state('app.team-detail', {
-      url: "/teams/:id",
-      views: {
-        'mainContent': {
-          templateUrl: "app/teams/team-detail.html"
-        }
+  .state('app.team-detail', {
+    url: "/teams/:id",
+    views: {
+      'mainContent': {
+        templateUrl: "app/teams/team-detail.html"
       }
-    })
+    }
+  })
 
-    .state('app.game', {
-      url: "/game/:id",
-      views: {
-        'mainContent': {
-          templateUrl: "app/game/game.html"
-        }
+  .state('app.game', {
+    url: "/game/:id",
+    views: {
+      'mainContent': {
+        templateUrl: "app/game/game.html"
       }
-    })
+    }
+  })
 
-    .state('app.standings', {
-      url: "/standings",
-      views: {
-        'mainContent': {
-          templateUrl: "app/standings/standings.html"
-        }
+  .state('app.standings', {
+    url: "/standings",
+    views: {
+      'mainContent': {
+        templateUrl: "app/standings/standings.html"
       }
-    })
+    }
+  })
 
-    .state('app.locations', {
-      url: "/locations",
-      views: {
-        'mainContent': {
-          templateUrl: "app/locations/locations.html"
-        }
+  .state('app.locations', {
+    url: "/locations",
+    views: {
+      'mainContent': {
+        templateUrl: "app/locations/locations.html"
       }
-    })
+    }
+  })
 
-    .state('app.rules', {
-      url: "/rules",
-      views: {
-        'mainContent': {
-          templateUrl: "app/rules/rules.html",
-        }
+  .state('app.location-map', {
+    url: "/location-map/:id",
+    views: {
+      'mainContent': {
+        templateUrl: "app/locations/location-map.html"
       }
-    });
+    }
+  })
+
+  .state('app.rules', {
+    url: "/rules",
+    views: {
+      'mainContent': {
+        templateUrl: "app/rules/rules.html",
+      }
+    }
+  });
 
 
-    $urlRouterProvider.otherwise('/home/leagues');// can't be /home
+  $urlRouterProvider.otherwise('/home/leagues');// can't be /home
+
 })

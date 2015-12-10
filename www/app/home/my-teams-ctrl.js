@@ -7,7 +7,7 @@
         var vm = this;
 
         vm.myTeams = myTeamsService.getFollowedTeams();
-console.log(vm.myTeams);
+
         vm.goToTeam = function(team){
             eliteApi.setLeagueId(team.leagueId);
             $state.go("app.team-detail", { id: team.id });

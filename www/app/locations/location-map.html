@@ -1,0 +1,12 @@
+<ion-view title="Map" ng-controller="LocationMapCtrl as vm">
+	<ion-content>
+
+		<!-- <google-map draggable="true"> center='vm.map.center' zoom='vm.map.zoom' </google-map> -->
+		<ui-gmap-google-map draggable='false' center='vm.map.center' zoom='vm.map.zoom'>
+			<ui-gmap-marker idKey=1 coords="vm.marker" options="vm.marker" click="vm.locationClicked(vm.marker)">
+				<!-- <marker-label content="vm.marker.title" anchor="10 -8" class="marker-labels"></marker-label> -->
+			</ui-gmap-marker>
+
+		</ui-gmap-google-map>
+	</ion-content>
+</ion-view>
