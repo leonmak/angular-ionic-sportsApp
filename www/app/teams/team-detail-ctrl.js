@@ -1,20 +1,20 @@
 (function () {
   'use strict';
 
-  angular.module('eliteApp').controller('TeamDetailCtrl', ['$ionicPopup' , '$stateParams'   , 'eliteApi', TeamDetailCtrl]);
+  angular.module('eliteApp').controller('TeamDetailCtrl', [ '$ionicPopup' , '$stateParams', 'eliteApi', 'myTeamsService',TeamDetailCtrl]);
   // injecting $stateParams
-  function TeamDetailCtrl($ionicPopup, $stateParams, eliteApi) {
+  function TeamDetailCtrl($ionicPopup, $stateParams, eliteApi,myTeamsService) {
     var vm = this;
 
+
     vm.teamId = Number($stateParams.id);
-    // eliteApi.setLeagueId(id);
-    // team id is in state params
+
     eliteApi.getLeagueData().then(function(data){
-      // using lodash for finding games that selected team is in
-      var team = _.chain(data.teams)
+
+     var team = _.chain(data.teams)
       .map(function(division){ return division.divisionTeams;})
       .flatten()
-      // .find(function(teamObj){ return teamObj.id===vm.teamId})
+      .find(function(teamObj){ return teamObj.id===vm.teamId})
       // .find({ "id": vm.teamId })
       .value();
       console.log(team);
@@ -46,7 +46,7 @@
       .value();
 
       // for follow button, need to set initial value for following
-      vm.following = false;
+      vm.following = myTeamsService.isFollowingTeam(vm.teamId);
       vm.toggleFollow = function(){
         if (vm.following) {
           var confirmPopup = $ionicPopup.confirm({
@@ -55,10 +55,12 @@
           });
           confirmPopup.then(function(res) {
             if(res) {
+              myTeamsService.unfollowTeam(team);
               vm.following = !vm.following;
             }
           });
         } else{
+          myTeamsService.followTeam(team);
           vm.following = !vm.following;
         }
       };

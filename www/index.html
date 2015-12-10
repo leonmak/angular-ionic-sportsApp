@@ -14,6 +14,8 @@
 
 <!-- ionic/angularjs js -->
 <script src="lib/ionic/js/ionic.bundle.js"></script>
+<script src="lib/lodash/lodash.min.js"></script>
+<script src="lib/angular-cache/dist/angular-cache.min.js"></script>
 
 <!-- cordova script (this will be a 404 during development) -->
 <script src="cordova.js"></script>
@@ -21,13 +23,14 @@
 <!-- your app's js -->
 <script src="app/app.js"></script>
 <script src="app/services/eliteApi.js"></script>
+<script src="app/services/myTeamsService.js"></script>
 <script src="app/teams/team-detail-ctrl.js"></script>
 <script src="app/home/leagues-ctrl.js"></script>
+<script src="app/home/my-teams-ctrl.js"></script>
 <script src="app/locations/locations-ctrl.js"></script>
 <script src="app/teams/teams-ctrl.js"></script>
 <script src="app/standings/standings-ctrl.js"></script>
 <script src="app/game/game-ctrl.js"></script>
-<script src="lib/lodash/lodash.js"></script>
 </head>
 
 <body ng-app="eliteApp">
