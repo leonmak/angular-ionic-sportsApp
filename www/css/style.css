@@ -37,3 +37,8 @@ map {
   color:white;
 
 }
+
+.allow-bullets ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
